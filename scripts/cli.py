@@ -1,11 +1,11 @@
 import click
 
-from scripts.ingest import ingest
+from scripts.compare import compare
 from scripts.data_cmd import data
 from scripts.evaluate import evaluate
-from scripts.optimize import optimize
-from scripts.compare import compare
 from scripts.export_cmd import export
+from scripts.ingest import ingest
+from scripts.optimize import optimize
 
 
 @click.group()

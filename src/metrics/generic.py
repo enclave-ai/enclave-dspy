@@ -11,7 +11,10 @@ def structural_completeness(example: dspy.Example, pred: dspy.Prediction, trace=
     indicators = [
         len(response) > 50,
         "\n" in response,
-        any(marker in response.lower() for marker in ["finding", "severity", "description", "issue", "vulnerability"]),
+        any(
+            marker in response.lower()
+            for marker in ["finding", "severity", "description", "issue", "vulnerability"]
+        ),
         any(marker in response for marker in ["##", "- ", "1.", "*"]),
     ]
     return sum(indicators) / len(indicators)

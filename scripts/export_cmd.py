@@ -3,8 +3,8 @@ from pathlib import Path
 import click
 
 from src.config import get_enclave_agents_dir
-from src.ingestion.parser import parse_agent
 from src.export.exporter import export_agent
+from src.ingestion.parser import parse_agent
 
 OPTIMIZED_DIR = Path("optimized")
 EXPORTS_DIR = Path("exports")

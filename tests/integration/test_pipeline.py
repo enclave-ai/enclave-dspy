@@ -1,13 +1,10 @@
 import json
-from pathlib import Path
 
-from src.ingestion.parser import parse_agent
-from src.ingestion.models import AgentSpec
-from src.signatures.factory import create_signature
-from src.modules.factory import create_module
-from src.data.loader import load_dataset, load_all_splits
+from src.data.loader import load_all_splits
 from src.export.exporter import export_agent, format_agent_markdown
-
+from src.ingestion.parser import parse_agent
+from src.modules.factory import create_module
+from src.signatures.factory import create_signature
 
 SAMPLE_AGENT = """\
 ---
@@ -39,7 +36,7 @@ def test_full_pipeline_ingest_to_export(tmp_path):
     assert spec.has_tools is True
 
     # Step 2: Create DSPy signature and module
-    sig = create_signature(spec)
+    create_signature(spec)
     module = create_module(spec)
     assert module.agent_spec.id == "test-analyst"
 
@@ -47,14 +44,32 @@ def test_full_pipeline_ingest_to_export(tmp_path):
     data_dir = tmp_path / "datasets" / "test-analyst"
     data_dir.mkdir(parents=True)
 
+    vuln_context = (
+        "app.get('/users/:id', (req, res) => { "
+        "db.query('SELECT * FROM users WHERE id=' + req.params.id) })"
+    )
+    safe_context = (
+        "const sanitized = escape(input); "
+        "db.query('SELECT * FROM users WHERE id=?', [sanitized])"
+    )
     examples = [
         {
-            "inputs": {"context": "app.get('/users/:id', (req, res) => { db.query('SELECT * FROM users WHERE id=' + req.params.id) })", "task": "Find SQL injection vulnerabilities"},
-            "outputs": {"response": "## Finding: SQL Injection\n\nSeverity: High\n\nThe endpoint concatenates user input directly into SQL query."},
+            "inputs": {"context": vuln_context, "task": "Find SQL injection vulnerabilities"},
+            "outputs": {
+                "response": (
+                    "## Finding: SQL Injection\n\nSeverity: High\n\n"
+                    "The endpoint concatenates user input directly into SQL query."
+                )
+            },
         },
         {
-            "inputs": {"context": "const sanitized = escape(input); db.query('SELECT * FROM users WHERE id=?', [sanitized])", "task": "Find SQL injection vulnerabilities"},
-            "outputs": {"response": "No SQL injection vulnerabilities found. Input is properly sanitized and parameterized."},
+            "inputs": {"context": safe_context, "task": "Find SQL injection vulnerabilities"},
+            "outputs": {
+                "response": (
+                    "No SQL injection vulnerabilities found. "
+                    "Input is properly sanitized and parameterized."
+                )
+            },
         },
     ]
 

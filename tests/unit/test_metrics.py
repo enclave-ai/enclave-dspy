@@ -1,6 +1,6 @@
 import dspy
 
-from src.metrics.generic import structural_completeness, combined_metric
+from src.metrics.generic import combined_metric, structural_completeness
 
 
 def _make_example_and_pred(response: str, expected: str):

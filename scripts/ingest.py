@@ -15,8 +15,9 @@ from src.ingestion.parser import parse_agent, parse_agents_dir, parse_skills_dir
 def ingest(enclave_path: str | None, agent: str | None):
     """Parse Enclave agent definitions into DSPy-compatible specs."""
     if enclave_path:
-        agents_dir = Path(enclave_path) / "packages" / "ai-client" / "src" / "definitions" / "agents"
-        skills_dir = Path(enclave_path) / "packages" / "ai-client" / "src" / "definitions" / "skills"
+        defs = Path(enclave_path) / "packages" / "ai-client" / "src" / "definitions"
+        agents_dir = defs / "agents"
+        skills_dir = defs / "skills"
     else:
         agents_dir = get_enclave_agents_dir()
         skills_dir = get_enclave_skills_dir()

@@ -1,10 +1,8 @@
-import json
-from pathlib import Path
 
 import pytest
 
-from src.ingestion.models import AgentSpec
 from src.export.exporter import export_agent, format_agent_markdown
+from src.ingestion.models import AgentSpec
 
 
 def _make_agent() -> AgentSpec:
@@ -15,14 +13,18 @@ def _make_agent() -> AgentSpec:
         max_output_tokens=32768,
         max_iterations=30,
         tools=["list_dir", "read_file", "bash"],
-        system_prompt="You are an expert cybersecurity researcher.\n\nAnalyze code for vulnerabilities.",
+        system_prompt=(
+            "You are an expert cybersecurity researcher.\n\nAnalyze code for vulnerabilities."
+        ),
         recovery_iterations=5,
     )
 
 
 def test_format_agent_markdown():
     agent = _make_agent()
-    optimized_instructions = "You are a highly skilled security analyst specializing in code review."
+    optimized_instructions = (
+        "You are a highly skilled security analyst specializing in code review."
+    )
     demonstrations = "Example: Given login.py, found SQL injection in query builder."
 
     md = format_agent_markdown(agent, optimized_instructions, demonstrations)

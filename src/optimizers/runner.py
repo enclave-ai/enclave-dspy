@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-import json
 from datetime import datetime, timezone
 from pathlib import Path
 
 import dspy
 from dspy.teleprompt import BootstrapFewShot, MIPROv2
 
-from src.config import Config, AgentOptConfig
-from src.metrics.generic import combined_metric
-from src.metrics.judge import LLMJudge
+from src.config import Config
 from src.metrics.domain import get_domain_metric
+from src.metrics.generic import combined_metric
 
 
 class OptimizationResult:

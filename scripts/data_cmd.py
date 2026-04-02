@@ -2,11 +2,10 @@ from pathlib import Path
 
 import click
 
-from src.config import load_config
+from src.config import get_enclave_agents_dir, load_config
 from src.data.loader import get_dataset_status
 from src.data.synthetic import generate_synthetic_examples
 from src.ingestion.parser import parse_agent
-from src.config import get_enclave_agents_dir
 
 DATASETS_DIR = Path("datasets")
 

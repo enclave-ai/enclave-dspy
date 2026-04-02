@@ -17,7 +17,7 @@ class SyntheticGenerator(dspy.Signature):
     context: str = dspy.OutputField(desc="Realistic code context or input for the agent")
     task: str = dspy.OutputField(desc="A specific task appropriate for this agent")
     response: str = dspy.OutputField(desc="The ideal agent response")
-    confidence: float = dspy.OutputField(desc="Confidence score 0.0 to 1.0 for this example's quality")
+    confidence: float = dspy.OutputField(desc="Confidence score 0.0-1.0 for this example's quality")
 
 
 def generate_synthetic_examples(

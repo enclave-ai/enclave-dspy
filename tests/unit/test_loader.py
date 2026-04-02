@@ -2,15 +2,20 @@ import json
 
 import dspy
 
-from src.data.loader import load_dataset, load_all_splits, DatasetInfo, get_dataset_status
+from src.data.loader import get_dataset_status, load_all_splits, load_dataset
 
 
 def test_load_dataset_from_jsonl(tmp_path):
     data_file = tmp_path / "train.jsonl"
-    data_file.write_text(
-        json.dumps({"inputs": {"context": "code here", "task": "find vulns"}, "outputs": {"response": "found XSS"}}) + "\n"
-        + json.dumps({"inputs": {"context": "more code", "task": "audit"}, "outputs": {"response": "no issues"}}) + "\n"
-    )
+    row1 = json.dumps({
+        "inputs": {"context": "code here", "task": "find vulns"},
+        "outputs": {"response": "found XSS"},
+    })
+    row2 = json.dumps({
+        "inputs": {"context": "more code", "task": "audit"},
+        "outputs": {"response": "no issues"},
+    })
+    data_file.write_text(row1 + "\n" + row2 + "\n")
     examples = load_dataset(data_file)
     assert len(examples) == 2
     assert isinstance(examples[0], dspy.Example)

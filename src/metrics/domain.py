@@ -4,7 +4,6 @@ import re
 
 import dspy
 
-
 SEVERITY_LEVELS = {"critical", "high", "medium", "low", "info"}
 
 

@@ -1,7 +1,6 @@
 import pytest
 
-from src.ingestion.models import AgentSpec, SkillSpec
-from src.ingestion.parser import parse_agent, parse_skill, parse_agents_dir, parse_skills_dir
+from src.ingestion.parser import parse_agent, parse_agents_dir, parse_skill, parse_skills_dir
 
 
 def test_parse_agent(sample_agent_markdown):

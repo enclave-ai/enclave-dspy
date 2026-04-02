@@ -2,12 +2,11 @@ from pathlib import Path
 
 import click
 
-from src.config import load_config, configure_dspy
+from src.config import configure_dspy, get_enclave_agents_dir, load_config
 from src.data.loader import load_all_splits
 from src.ingestion.parser import parse_agent
 from src.modules.factory import create_module
 from src.optimizers.runner import run_optimization
-from src.config import get_enclave_agents_dir
 
 DATASETS_DIR = Path("datasets")
 OPTIMIZED_DIR = Path("optimized")

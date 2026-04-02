@@ -9,9 +9,9 @@ class JudgeAssessment(dspy.Signature):
     task: str = dspy.InputField(desc="The task the agent was asked to perform")
     expected_response: str = dspy.InputField(desc="The expected/ideal response")
     actual_response: str = dspy.InputField(desc="The agent's actual response")
-    relevance_score: float = dspy.OutputField(desc="How relevant the response is to the task (0.0-1.0)")
+    relevance_score: float = dspy.OutputField(desc="Response relevance to the task (0.0-1.0)")
     completeness_score: float = dspy.OutputField(desc="How complete the response is (0.0-1.0)")
-    accuracy_score: float = dspy.OutputField(desc="How accurate the response is vs expected (0.0-1.0)")
+    accuracy_score: float = dspy.OutputField(desc="Accuracy of the response vs expected (0.0-1.0)")
     feedback: str = dspy.OutputField(desc="Brief textual feedback explaining the scores")
 
 
