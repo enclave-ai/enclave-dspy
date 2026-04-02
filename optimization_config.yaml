@@ -1,0 +1,81 @@
+defaults:
+  max_bootstrapped_demos: 4
+  max_labeled_demos: 8
+  improvement_threshold: 0.05
+  teacher_model: "anthropic/claude-opus-4-6"
+  target_model: "anthropic/claude-sonnet-4-6"
+
+agents:
+  security-analyst:
+    optimizers: [bootstrap, mipro_light, gepa]
+    metric_weights:
+      finding_precision: 0.3
+      finding_recall: 0.3
+      severity_accuracy: 0.2
+      judge: 0.2
+  attack-surface-mapper:
+    optimizers: [bootstrap, mipro_light]
+    metric_weights:
+      coverage: 0.4
+      delegation_quality: 0.3
+      judge: 0.3
+  chat-assistant:
+    optimizers: [bootstrap, mipro_medium]
+    metric_weights:
+      relevance: 0.4
+      correctness: 0.3
+      actionability: 0.3
+  pr-security-reviewer:
+    optimizers: [bootstrap, mipro_light]
+    metric_weights:
+      finding_relevance: 0.4
+      false_alarm_rate: 0.3
+      severity_calibration: 0.3
+  finding-verifier:
+    optimizers: [bootstrap, mipro_light]
+    metric_weights:
+      false_positive_rate: 0.4
+      false_negative_rate: 0.4
+      reasoning_quality: 0.2
+  finding-dedup-checker:
+    optimizers: [bootstrap, mipro_light]
+    metric_weights:
+      dedup_accuracy: 0.5
+      false_merge_rate: 0.3
+      judge: 0.2
+  diff-analyzer:
+    optimizers: [bootstrap, mipro_light]
+    metric_weights:
+      semantic: 0.3
+      structural: 0.3
+      judge: 0.4
+  conversation-compactor:
+    optimizers: [bootstrap, mipro_light]
+    metric_weights:
+      semantic: 0.5
+      structural: 0.3
+      judge: 0.2
+  memory-extractor:
+    optimizers: [bootstrap, mipro_light]
+    metric_weights:
+      semantic: 0.4
+      structural: 0.3
+      judge: 0.3
+  suggestion-summarizer:
+    optimizers: [bootstrap, mipro_light]
+    metric_weights:
+      semantic: 0.5
+      structural: 0.3
+      judge: 0.2
+  architecture-scanner:
+    optimizers: [bootstrap, mipro_light]
+    metric_weights:
+      coverage: 0.4
+      structural: 0.3
+      judge: 0.3
+  dedup-checker:
+    optimizers: [bootstrap, mipro_light]
+    metric_weights:
+      dedup_accuracy: 0.5
+      false_merge_rate: 0.3
+      judge: 0.2
