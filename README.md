@@ -30,6 +30,42 @@ enclave-dspy export --agent security-analyst
 
 See [docs/usage.md](docs/usage.md) for full documentation.
 
+## Braintrust ETL
+
+Pull real production traces from S3 and extract training data for all agents automatically:
+
+```bash
+# Pull and extract all agents
+enclave-dspy data pull
+
+# Pull a specific agent
+enclave-dspy data pull --agent security-analyst
+
+# Check what you have
+enclave-dspy data status
+```
+
+Handles Enclave's multi-agent hierarchy — architecture-scanner delegates to security-analyst, finding-verifier, memory-extractor, etc. The ETL correctly attributes LLM calls to the right agent by tracing the span parent chain.
+
+### Current Datasets (from production logs)
+
+| Agent | Train | Dev | Test | Notes |
+|---|---|---|---|---|
+| finding-verifier | 433 | 92 | 92 | Largest dataset, validates/rejects findings |
+| security-analyst | 122 | 25 | 25 | Core vulnerability scanner |
+| chat-assistant | 112 | 24 | 24 | User-facing chat, already optimized |
+| memory-extractor | 109 | 23 | 23 | Extracts reusable knowledge |
+| finding-dedup-checker | 27 | 5 | 5 | Deduplicates vulnerability reports |
+| attack-surface-mapper | 14 | 2 | 2 | Maps attack surfaces, delegates to analysts |
+| architecture-scanner | 13 | 2 | 2 | Top-level orchestrator |
+| diff-analyzer | 8 | 2 | 2 | PR diff security analysis |
+
+## Optimization Results
+
+| Agent | Baseline | Optimized | Improvement | Cost | Optimizer |
+|---|---|---|---|---|---|
+| chat-assistant | 69.3% | 75.7% | +9.2% | $1.28 | BootstrapFewShot |
+
 ## Architecture
 
 See [docs/superpowers/specs/2026-04-02-enclave-dspy-design.md](docs/superpowers/specs/2026-04-02-enclave-dspy-design.md) for the full design spec.
