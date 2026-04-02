@@ -8,7 +8,11 @@ from dspy.teleprompt import BootstrapFewShot, MIPROv2
 
 from src.config import Config
 from src.metrics.domain import get_domain_metric
-from src.metrics.generic import combined_metric
+from src.metrics.generic import (
+    combined_metric,
+    length_ratio,
+    structural_completeness,
+)
 
 
 class OptimizationResult:
@@ -40,11 +44,16 @@ def build_metric(agent_id: str, config: Config):
     if not weights:
         return combined_metric
 
+    generic_metrics = {
+        "structural": structural_completeness,
+        "length_ratio": length_ratio,
+    }
+
     def metric(example, pred, trace=None):
         total = 0.0
         total_weight = 0.0
         for name, weight in weights.items():
-            fn = get_domain_metric(name)
+            fn = generic_metrics.get(name) or get_domain_metric(name)
             score = fn(example, pred, trace)
             total += score * weight
             total_weight += weight

@@ -20,11 +20,10 @@ agents:
       delegation_quality: 0.3
       judge: 0.3
   chat-assistant:
-    optimizers: [bootstrap, mipro_medium]
+    optimizers: [bootstrap, mipro_light]
     metric_weights:
-      relevance: 0.4
-      correctness: 0.3
-      actionability: 0.3
+      structural: 0.5
+      length_ratio: 0.5
   pr-security-reviewer:
     optimizers: [bootstrap, mipro_light]
     metric_weights:
