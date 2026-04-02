@@ -41,6 +41,45 @@ def generate(agent: str, count: int, teacher_model: str | None):
 
 
 @data.command()
+@click.option("--bucket", default="enclave-braintrust-logs", help="S3 bucket name")
+@click.option("--prefix", default="logs/", help="S3 prefix")
+@click.option("--profile", default="readonly", help="AWS profile")
+@click.option("--local-dir", default="/tmp/bt-logs", help="Local cache directory")
+@click.option("--agent", default=None, help="Extract specific agent (default: all)")
+def pull(
+    bucket: str,
+    prefix: str,
+    profile: str,
+    local_dir: str,
+    agent: str | None,
+):
+    """Pull production traces from Braintrust S3 logs and extract training data."""
+    import logging
+
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+
+    from src.data.braintrust_etl import extract_all_agents, sync_s3_logs
+
+    logs_path = Path(local_dir)
+
+    click.echo(f"Syncing s3://{bucket}/{prefix} → {logs_path}")
+    sync_s3_logs(bucket, prefix, logs_path, profile)
+
+    agents = [agent] if agent else None
+    click.echo(f"\nExtracting {'agent: ' + agent if agent else 'all agents'}...")
+
+    results = extract_all_agents(logs_path, DATASETS_DIR, agents)
+
+    click.echo(f"\n{'Agent':<30} {'Train':>6} {'Dev':>6} {'Test':>6}")
+    click.echo("-" * 54)
+    for name, counts in sorted(results.items()):
+        click.echo(
+            f"{name:<30} {counts.get('train', 0):>6} "
+            f"{counts.get('dev', 0):>6} {counts.get('test', 0):>6}"
+        )
+
+
+@data.command()
 def status():
     """Show dataset counts for all agents."""
     if not DATASETS_DIR.exists():
